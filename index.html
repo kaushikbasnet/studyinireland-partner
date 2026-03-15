@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Partner Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Playfair+Display:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #f8fafc;
+        --surface: #ffffff;
+        --surface2: #f1f5f9;
+        --border: rgba(0, 0, 0, 0.1);
+        --border-focus: rgba(37, 99, 235, 0.5);
+        --accent: #2563eb;
+        --accent2: #1d4ed8;
+        --text: #1f2937;
+        --text-muted: #6b7280;
+        --text-label: #4b5563;
+        --error: #ef4444;
+        --success: #10b981;
+        --glow: rgba(37, 99, 235, 0.1);
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 3rem 1.5rem;
+      }
+
+      .wrapper {
+        width: 100%;
+        max-width: 900px;
+        position: relative;
+        z-index: 1;
+        animation: fadeUp 0.7s ease both;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Updated Internal Header */
+      .card-header {
+        padding: 2.5rem 2rem 1.5rem;
+        text-align: center;
+        border-bottom: 1px solid var(--border);
+      }
+
+      h1 {
+        font-family: "Playfair Display", serif;
+        font-size: clamp(1.6rem, 3vw, 2.2rem);
+        font-weight: 400;
+        color: #111827;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+
+      h1 span {
+        color: var(--accent);
+        font-style: italic;
+      }
+
+      .header-sub {
+        margin-top: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        font-weight: 300;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      }
+
+      .steps {
+        display: flex;
+        align-items: center;
+        padding: 1.25rem 2rem;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface2);
+      }
+
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        flex: 1;
+      }
+
+      .step-num {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+        flex-shrink: 0;
+        transition: all 0.3s;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        color: var(--text-muted);
+        background: transparent;
+      }
+
+      .step.active .step-num {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+        box-shadow: 0 0 12px rgba(37, 99, 235, 0.3);
+      }
+
+      .step.done .step-num {
+        background: rgba(16, 185, 129, 0.1);
+        border-color: var(--success);
+        color: var(--success);
+      }
+
+      .step-label {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .step.active .step-label {
+        color: var(--text);
+      }
+
+      .step-line {
+        flex: 1;
+        height: 1px;
+        background: rgba(0, 0, 0, 0.1);
+        margin: 0 0.75rem;
+        max-width: 60px;
+      }
+
+      .step-line.done {
+        background: var(--success);
+      }
+
+      .form-body {
+        padding: 2.5rem 2rem;
+      }
+
+      .section {
+        display: none;
+        animation: sectionIn 0.4s ease both;
+      }
+
+      .section.active {
+        display: block;
+      }
+
+      @keyframes sectionIn {
+        from {
+          opacity: 0;
+          transform: translateX(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .section-title {
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .section-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+      }
+      .grid-1 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+      }
+
+      @media (max-width: 640px) {
+        .grid-3,
+        .grid-2 {
+          grid-template-columns: 1fr;
+        }
+        .steps {
+          padding: 1rem;
+        }
+        .step-label {
+          display: none;
+        }
+        .form-body {
+          padding: 1.5rem 1rem;
+        }
+        .card-header {
+          padding: 2rem 1.5rem 1rem;
+        }
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+      .field label {
+        font-size: 0.72rem;
+        font-weight: 500;
+        color: var(--text-label);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .field label .req {
+        color: var(--accent);
+      }
+
+      .field input,
+      .field select {
+        width: 100%;
+        padding: 0.7rem 0.9rem;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        color: var(--text);
+        font-family: inherit;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+        outline: none;
+      }
+
+      .field input:focus,
+      .field select:focus {
+        border-color: var(--border-focus);
+        background: #fff;
+        box-shadow: 0 0 0 3px var(--glow);
+      }
+
+      .field.has-error input {
+        border-color: var(--error);
+      }
+      .field-error {
+        font-size: 0.7rem;
+        color: var(--error);
+        display: none;
+        margin-top: 2px;
+      }
+      .field.has-error .field-error {
+        display: flex;
+      }
+
+      .input-wrap {
+        position: relative;
+      }
+      .input-wrap svg {
+        position: absolute;
+        right: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.4;
+        color: var(--text-muted);
+      }
+
+      .phone-group {
+        display: flex;
+        gap: 0.5rem;
+      }
+      .phone-group .code-field {
+        width: 90px;
+        flex-shrink: 0;
+      }
+      .phone-group .num-field {
+        flex: 1;
+      }
+
+      .select-wrap {
+        position: relative;
+      }
+      .select-wrap::after {
+        content: "";
+        position: absolute;
+        right: 0.9rem;
+        top: 50%;
+        transform: translateY(-50%);
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 5px solid var(--text-muted);
+        pointer-events: none;
+      }
+
+      .form-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 2.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.7rem 1.5rem;
+        border-radius: 10px;
+        font-family: inherit;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+      }
+
+      .btn-ghost {
+        background: transparent;
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: #fff;
+        font-weight: 600;
+      }
+      .btn-primary:hover {
+        background: var(--accent2);
+        transform: translateY(-1px);
+      }
+
+      .success-screen {
+        display: none;
+        text-align: center;
+        padding: 4rem 2rem;
+        animation: fadeUp 0.5s ease both;
+      }
+      .success-screen.show {
+        display: block;
+      }
+      .success-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: rgba(16, 185, 129, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        color: var(--success);
+      }
+
+      .mt-4 {
+        margin-top: 1.25rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="card">
+        <div class="card-header">
+          <h1>Become a <span>Partner</span></h1>
+          <p class="header-sub">
+            Join our network. Complete the form to get started.
+          </p>
+        </div>
+
+        <div class="steps">
+          <div class="step active" data-step="1">
+            <div class="step-num">1</div>
+            <div class="step-label">Company Info</div>
+          </div>
+          <div class="step-line" id="line1"></div>
+          <div class="step" data-step="2">
+            <div class="step-num">2</div>
+            <div class="step-label">Contact Details</div>
+          </div>
+          <div class="step-line" id="line2"></div>
+          <div class="step" data-step="3">
+            <div class="step-num">3</div>
+            <div class="step-label">Location & Links</div>
+          </div>
+        </div>
+
+        <div class="form-body">
+          <form id="regForm" novalidate>
+            <div class="section active" id="section-1">
+              <div class="section-title">Company Information</div>
+              <div class="grid-1">
+                <div class="field" id="f-company">
+                  <label
+                    >Registered Company Name <span class="req">*</span></label
+                  >
+                  <div class="input-wrap">
+                    <input
+                      type="text"
+                      id="company"
+                      placeholder="Your company's legal name"
+                      required
+                    />
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+                      <path
+                        d="M3 21h18M3 7l9-4 9 4M4 7v14M20 7v14M9 21V10H7v11M17 21V10h-2v11M12 21V10h-2v11h2"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                  <div class="field-error">⚠ Company name is required</div>
+                </div>
+              </div>
+              <div class="grid-2 mt-4">
+                <div class="field" id="f-fname">
+                  <label>First Name <span class="req">*</span></label>
+                  <input
+                    type="text"
+                    id="fname"
+                    placeholder="First name"
+                    required
+                  />
+                  <div class="field-error">⚠ First name is required</div>
+                </div>
+                <div class="field" id="f-lname">
+                  <label>Last Name <span class="req">*</span></label>
+                  <input
+                    type="text"
+                    id="lname"
+                    placeholder="Last name"
+                    required
+                  />
+                  <div class="field-error">⚠ Last name is required</div>
+                </div>
+              </div>
+              <div class="grid-1 mt-4">
+                <div class="field" id="f-designation">
+                  <label>Designation <span class="req">*</span></label>
+                  <input
+                    type="text"
+                    id="designation"
+                    placeholder="e.g. Director, CEO, Manager"
+                    required
+                  />
+                  <div class="field-error">⚠ Designation is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section" id="section-2">
+              <div class="section-title">Contact Details</div>
+              <div class="grid-1">
+                <div class="field" id="f-email">
+                  <label>Business Email <span class="req">*</span></label>
+                  <div class="input-wrap">
+                    <input
+                      type="email"
+                      id="email"
+                      placeholder="name@company.com"
+                      required
+                    />
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+                      <path
+                        d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                      <polyline
+                        points="22,6 12,13 2,6"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <div class="field-error">
+                    ⚠ A valid email address is required
+                  </div>
+                </div>
+              </div>
+              <div class="grid-2 mt-4">
+                <div class="field" id="f-mobile">
+                  <label>Mobile Number <span class="req">*</span></label>
+                  <div class="phone-group">
+                    <input
+                      type="text"
+                      id="mobileCode"
+                      class="code-field"
+                      placeholder="+977"
+                      required
+                    />
+                    <input
+                      type="tel"
+                      id="mobile"
+                      class="num-field"
+                      placeholder="Mobile number"
+                      required
+                    />
+                  </div>
+                  <div class="field-error">⚠ Mobile number is required</div>
+                </div>
+                <div class="field" id="f-whatsapp">
+                  <label>WhatsApp Number <span class="req">*</span></label>
+                  <div class="phone-group">
+                    <input
+                      type="text"
+                      id="waCode"
+                      class="code-field"
+                      placeholder="+977"
+                      required
+                    />
+                    <input
+                      type="tel"
+                      id="whatsapp"
+                      class="num-field"
+                      placeholder="WhatsApp number"
+                      required
+                    />
+                  </div>
+                  <div class="field-error">⚠ WhatsApp number is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="section" id="section-3">
+              <div class="section-title">Location & Online Presence</div>
+              <div class="grid-3">
+                <div class="field" id="f-country">
+                  <label>Country <span class="req">*</span></label>
+                  <div class="select-wrap">
+                    <select id="country" required>
+                      <option value="">Select Country</option>
+                      <option value="nepal">Nepal</option>
+                      <option value="india">India</option>
+                    </select>
+                  </div>
+                  <div class="field-error">⚠ Please select a country</div>
+                </div>
+                <div class="field" id="f-state">
+                  <label>State / Province <span class="req">*</span></label>
+                  <input
+                    type="text"
+                    id="state"
+                    placeholder="State or province"
+                    required
+                  />
+                  <div class="field-error">⚠ State is required</div>
+                </div>
+                <div class="field" id="f-city">
+                  <label>City <span class="req">*</span></label>
+                  <input type="text" id="city" placeholder="City" required />
+                  <div class="field-error">⚠ City is required</div>
+                </div>
+              </div>
+              <div class="grid-1 mt-4">
+                <div class="field" id="f-address">
+                  <label>Registered Address <span class="req">*</span></label>
+                  <input
+                    type="text"
+                    id="address"
+                    placeholder="Full registered company address"
+                    required
+                  />
+                  <div class="field-error">⚠ Address is required</div>
+                </div>
+              </div>
+              <div class="grid-1 mt-4">
+                <div class="field" id="f-link">
+                  <label
+                    >Website / Social Media <span class="req">*</span></label
+                  >
+                  <div class="input-wrap">
+                    <input
+                      type="text"
+                      id="link"
+                      placeholder="https://yourwebsite.com"
+                      required
+                    />
+                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24">
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                      />
+                      <path
+                        d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                      />
+                    </svg>
+                  </div>
+                  <div class="field-error">⚠ Please enter a valid URL</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-nav">
+              <button
+                type="button"
+                class="btn btn-ghost"
+                id="btnBack"
+                style="visibility: hidden"
+              >
+                <svg fill="none" viewBox="0 0 24 24" width="16">
+                  <path
+                    d="M19 12H5M5 12l7-7M5 12l7 7"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+                Back
+              </button>
+              <div style="font-size: 0.72rem; color: var(--text-muted)">
+                Step <span id="stepNum">1</span> of 3
+              </div>
+              <button type="button" class="btn btn-primary" id="btnNext">
+                Continue
+                <svg fill="none" viewBox="0 0 24 24" width="16">
+                  <path
+                    d="M5 12h14M13 5l7 7-7 7"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </form>
+
+          <div class="success-screen" id="successScreen">
+            <div class="success-icon">
+              <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
+                <path
+                  d="M20 6L9 17l-5-5"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <h2>Application Submitted</h2>
+            <p>
+              Thank you for applying. Our team will reach out within 2–3
+              business days.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let currentStep = 1;
+      const totalSteps = 3;
+
+      function validate(step) {
+        let valid = true;
+        const check = (ids) => {
+          ids.forEach((id) => {
+            const el = document.getElementById(id);
+            const field = document.getElementById("f-" + id);
+            if (!el.value.trim()) {
+              field.classList.add("has-error");
+              valid = false;
+            } else field.classList.remove("has-error");
+          });
+        };
+
+        if (step === 1) check(["company", "fname", "lname", "designation"]);
+        if (step === 2) {
+          check(["mobile", "whatsapp"]);
+          const email = document.getElementById("email");
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+            document.getElementById("f-email").classList.add("has-error");
+            valid = false;
+          } else
+            document.getElementById("f-email").classList.remove("has-error");
+        }
+        if (step === 3) check(["country", "state", "city", "address", "link"]);
+        return valid;
+      }
+
+      function goTo(step) {
+        document
+          .querySelectorAll(".section")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById("section-" + step).classList.add("active");
+        document.querySelectorAll(".step").forEach((s) => {
+          const n = parseInt(s.dataset.step);
+          s.classList.toggle("active", n === step);
+          s.classList.toggle("done", n < step);
+        });
+        for (let i = 1; i < totalSteps; i++) {
+          const line = document.getElementById("line" + i);
+          if (line) line.classList.toggle("done", i < step);
+        }
+        document.getElementById("stepNum").textContent = step;
+        document.getElementById("btnBack").style.visibility =
+          step > 1 ? "visible" : "hidden";
+        document.getElementById("btnNext").innerHTML =
+          step === totalSteps ? "Submit" : "Continue";
+        currentStep = step;
+      }
+
+      document.getElementById("btnNext").addEventListener("click", () => {
+        if (!validate(currentStep)) return;
+        if (currentStep < totalSteps) goTo(currentStep + 1);
+        else {
+          document.getElementById("regForm").style.display = "none";
+          document.getElementById("successScreen").classList.add("show");
+        }
+      });
+
+      document.getElementById("btnBack").addEventListener("click", () => {
+        if (currentStep > 1) goTo(currentStep - 1);
+      });
+    </script>
+  </body>
+</html>
